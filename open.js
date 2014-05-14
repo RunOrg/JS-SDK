@@ -1,2 +1,2 @@
 var RunOrg = function($) {
-    var r = {};
+    var RunOrg = {};
