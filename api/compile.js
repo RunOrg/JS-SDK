@@ -269,6 +269,7 @@ function compressGenerated()
     var hashes = {};
     
     function replace(string) {	
+	// Currently disabled, as code compresses better without it
 	if (true || string.length < 2 || occurrences[string] < 2) return null;
 	if (string in hashes) return hashes[string];
 	return hashes[string] = 'string' + (next++);
