@@ -1,2 +1,2 @@
   return RunOrg;
-}(jQuery)
+}
