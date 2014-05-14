@@ -34,32 +34,73 @@ function newClass() {
 //
 // Returns: 
 //   cls
-function addFunction(cls,name,method,url,build,member) {
+function addFunction(cls,name,method,url,query,body,build,member) {
     (member ? cls.prototype : cls)[name] = function() {
 	
-	var a = arrayOfArguments(arguments), u = url.slice(0), promise;
+	var a = arrayOfArguments(arguments), promise, self = this;
 
-	// Construct the contents of the URL
-	for (var i = 0; i < u.length; ++i) {
-	    
-	    if (isString(u[i])) {
-		// Arguments that start with '@' are member references
-		if (u[i].charAt(0) == '@') 
-		    u[i] = this[u[i].substring(1)];
-		
+	function compose(arg) {
+	    var out, k, temp, t = typeof arg;
+
+	    // Null values are ignored
+	    if (arg === null) return null;
+
+	    // Arrays are traversed and composed recursively
+	    if (arg instanceof Array) {
+		out = [];
+		for (k = 0 ; k < arg.length; ++i) 
+		    out.push(compose(arg[k]));		
+		return out;
 	    }
 
-	    // Non-string elements are argument numbers
-	    else u[i] = a[u[i]];	    
+	    // Objects are traversed and composed recursively
+	    if (t == 'object') {
+		out = {};
+		for (k in arg) {
+		    temp = compose(arg[k]);
+		    if (temp !== null) out[k] = temp;
+		}		    
+		return out;
+	    }
+
+	    // Functions are called on (self,this)
+	    if (t == "function") {
+		return arg(self,a);
+	    }
+
+	    // Anything else is kept as-is
+	    return arg;
 	}
 
-	return request(method,u,{},{}).then(
+	return request(method,compose(url),compose(query)||{},compose(body)).then(
 	    
 	    // Determine what happens to the result 
-	    build.length ? construct(grabFromRunOrg(build)) : function(x) { return x; }
+	    build.length ? construct(grabFromRunOrg(build)) : identity
 
 	);
 	
     };
     return cls;
+}
+
+// A function that extracts the member from 'this'
+//
+// Parameters: 
+//   member: the name of the member
+//
+// Returns: 
+//   a function which returns this[member] or null if not set
+function getMember(member) {
+    return function(self) { return self[member] || null; };
+}
+
+// A function that extracts the requested argument
+//
+// Parameters: 
+//   nth: the position of the argument
+//
+// Returns: 
+//   a function which returns args[nth]
+function getArgument(nth) {
+    return function(self,args) { return args[nth]; };
 }

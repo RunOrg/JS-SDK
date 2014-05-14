@@ -111,7 +111,7 @@ function compile(model,path)
 		
 		for (var i = 0; i < args.length; ++i) 
 		    if (args[i] === key) 
-			return generated.push(i);
+			return generated.push('getArgument(',i,')');
 
 		throw ("Unknown argument " + arg + " in " + path + "." + name)
 	    }

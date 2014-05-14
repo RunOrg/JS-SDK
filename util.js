@@ -29,3 +29,6 @@ function dictionary() {
     for (var i = 0; i < a.length; i += 2) out[a[i]] = a[i+1];
     return out;
 }
+
+// Identity function
+function identity(x) { return x; }
