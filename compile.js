@@ -20,6 +20,9 @@ function construct(cls) {
     }
 }
 
+// Utility: is a value a string?
+function isString(x) { return typeof x === 'string'; }
+
 // Creates a new class. 
 //
 // Parameters:
@@ -31,9 +34,13 @@ function newClass() {
     var a = arrayOfArguments(arguments);
     a.push('id');
     return function(data) {
-	for (var i = 0; i < a.length; ++i) {
-	    var k = a[i]; 
-	    if (k in data) this[k] = data[k];
+	if (isString(data)) {
+	    this.id = data;
+	} else { 
+	    for (var i = 0; i < a.length; ++i) {
+		var k = a[i]; 
+		if (k in data) this[k] = data[k];
+	    }
 	}
     }
 }
@@ -57,7 +64,7 @@ function addStatic(cls,name,method,url,build) {
 	// Construct the contents of the URL
 	for (var i = 0; i < u.length; ++i) {
 	    
-	    if (typeof u[i] === 'string') {
+	    if (isString(u[i])) {
 		// Arguments that start with '@' are member references
 		if (u[i].charAt(0) == '@') 
 		    u[i] = this[u[i].substring(1)];
