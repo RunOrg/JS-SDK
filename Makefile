@@ -2,7 +2,7 @@ runorg.min.js: runorg.js
 	cat $^ | yui-compressor --type js > $@
 	wc -c runorg.min.js
 
-runorg.js: open.js request.js api.js close.js 
+runorg.js: open.js request.js api.js compile.js close.js 
 	cat $^ > $@
 	wc -c runorg.js
 
