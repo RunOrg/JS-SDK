@@ -30,6 +30,8 @@ function recurse(tree,path)
 // Compile a specific model
 function compile(model,path) 
 {
+    model.fields.push('id');
+
     // ex: RunOrg.Person.Profile = ...
     generated.push('RunOrg');
     path.split('.').forEach(member);
@@ -146,7 +148,7 @@ function compile(model,path)
     function newClass() 
     {
 	generated.push('newClass(');
-	implode(model.fields, ',', string);
+	implode(model.fields.filter(function (k) { return k != 'id'; }, ',', string);
 	generated.push(')');
     }
 }

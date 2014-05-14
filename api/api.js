@@ -35,14 +35,14 @@ module.exports.Group = {
     
     model: {
 	fields: [
-	    'id',
-	    'label'
+	    'label',
+	    'count'
 	],
 	statics: {
 	    Get: [ ['id'], [ 'GET', '/groups/:id' ], 'Group' ],
 	},
 	methods: {
-	    Create: [ [], [ 'POST', '/groups', { id: '@id', label: '@label' } ], 'this' ],		      
+	    Create: [ [], [ 'POST', '/groups', { id: '@id', label: '@label' } ], '@' ],		      
 	}
     }
 
