@@ -10,7 +10,7 @@
 function newClass() {
     var a = arrayOfArguments(arguments);
     a.push('id');
-    return function(data) {
+    function RunOrgModel(data) {
 	if (isString(data)) {
 	    this.id = data;
 	} else { 
@@ -20,6 +20,8 @@ function newClass() {
 	    }
 	}
     }
+    RunOrgModel.prototype._isRunOrgModel = true;
+    return RunOrgModel;
 }
 
 // Adds a static function to a class.
@@ -55,12 +57,18 @@ function addFunction(cls,name,method,url,query,body,build,member) {
 
 	    // Objects are traversed and composed recursively
 	    if (t == 'object') {
+
+		// Only keep 'id' for model objects
+		// Note that 'this' never goes through this line
+		if ('_isRunOrgModel' in arg) return arg.id;
+
 		out = {};
 		for (k in arg) {
 		    temp = compose(arg[k]);
 		    if (temp !== null) out[k] = temp;
 		}		    
 		return out;
+
 	    }
 
 	    // Functions are called on (self,this)
