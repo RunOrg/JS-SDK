@@ -46,7 +46,7 @@ function compile(model,path)
     content();
     generated.push(';\n');
 
-    // ex: addStatic(...,'Get',1,'GET',['person',0],['Person'])
+    // ex: addStatic(...,'Get','GET',['person',0],['Person'])
     function addStatic(name,args,method,url,make,then) 
     {
 	return function() 
@@ -57,8 +57,6 @@ function compile(model,path)
 
 	    string(name); comma();
 	    
-	    generated.push(args.length); comma();
-
 	    string(method); comma();
 	    
 	    array(url.split('/').filter(function(s) { return s != ''; }),argument); comma();
