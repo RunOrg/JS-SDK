@@ -6,7 +6,7 @@ function arrayOfArguments(a) {
 }
 
 // Grab a class member of the 'RunOrg' object
-function grabFromRunOrg(path) {
+function grabFromRunOrg(path) {    
     for (var i = 0, r = RunOrg; i < path.length; ++i) {
 	r = RunOrg[path[i]];
     }

@@ -81,13 +81,14 @@ function compile(model,path)
 
 	    comma(); 
 
-	    array(make.split('.'),string);
-	    
+	    output(make);
+ 
 	    if (member) generated.push(',1');
 
 	    generated.push(')');
 	}
 
+	// Format an argument constructor
 	function argument(arg) 
 	{
 	    if (typeof arg === 'object')
@@ -148,6 +149,20 @@ function compile(model,path)
 	    }
 
 	    return string(arg);	    
+	}
+
+	// Format an output constructor
+	function output(make) 
+	{
+	    if (make === '@') return generated.push('assignToThis');		
+	    
+	    if (typeof make === 'string') 
+	    {
+		generated.push('assignToNew(');
+		implode(make.split('.'),',',string);
+		generated.push(')');
+		return;
+	    }
 	}
     }
 

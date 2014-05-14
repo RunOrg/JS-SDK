@@ -72,14 +72,11 @@ function addFunction(cls,name,method,url,query,body,build,member) {
 	    return arg;
 	}
 
-	return request(method,compose(url),compose(query)||{},compose(body)).then(
-	    
-	    // Determine what happens to the result 
-	    build.length ? construct(grabFromRunOrg(build)) : identity
-
-	);
-	
+	return request(method,compose(url),compose(query)||{},compose(body)).then(function(data) {
+	    return build(data,self);
+	});	
     };
+
     return cls;
 }
 
@@ -103,4 +100,16 @@ function getMember(member) {
 //   a function which returns args[nth]
 function getArgument(nth) {
     return function(self,args) { return args[nth]; };
+}
+
+// Assign to a new instance of a class
+function assignToNew() {
+    var a = arrayOfArguments(arguments);
+    return function(data,self) { return new (grabFromRunOrg(a))(data); };
+}
+
+// Assign data to the 'self' object
+function assignToThis(data,self) {
+    for (var k in data) self[k] = data[k];
+    return self;
 }
