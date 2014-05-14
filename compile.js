@@ -1,28 +1,5 @@
 // Compile the compressed API representation into actual JavaScript classes
 
-// Utility: turn an array into argumens
-function arrayOfArguments(a) {
-    return Array.prototype.slice(a,0);
-}
-
-// Utility: grab a class member of the 'RunOrg' object
-function grabFromRunOrg(path) {
-    for (var i = 0, r = RunOrg; i < path.length; ++i) {
-	r = RunOrg[path[i]];
-    }
-    return r;
-}
-
-// Utility: turn a class into a 'new' call to that class
-function construct(cls) {
-    return function(arg) {
-	return new cls(arg);
-    }
-}
-
-// Utility: is a value a string?
-function isString(x) { return typeof x === 'string'; }
-
 // Creates a new class. 
 //
 // Parameters:

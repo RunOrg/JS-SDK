@@ -148,7 +148,7 @@ function compile(model,path)
     function newClass() 
     {
 	generated.push('newClass(');
-	implode(model.fields.filter(function (k) { return k != 'id'; }, ',', string);
+	implode(model.fields.filter(function (k) { return k != 'id'; }), ',', string);
 	generated.push(')');
     }
 }
