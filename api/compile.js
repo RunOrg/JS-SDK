@@ -60,10 +60,10 @@ function compile(model,path)
 	var method = data.method;
 	var url    = data.url;
 	var make   = data.make || null;
-	var body   = data.body || {};
+	var body   = data.body || null;
 	var query  = data.query || null;
 	var args   = data.args || [];
-
+	var merge  = data.merge || null;
 	return function() 
 	{
 	    generated.push('addFunction(');
@@ -86,6 +86,11 @@ function compile(model,path)
 
 	    comma(); 
 
+	    if (merge) argument(merge);
+	    else generated.push('0');
+	    
+	    comma();
+		
 	    output(make);
  
 	    if (member) generated.push(',1');

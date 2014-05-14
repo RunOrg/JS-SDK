@@ -31,12 +31,13 @@ function newClass() {
 //   name: the name of the function
 //   method: the HTTP method used to send data
 //   url: an array describing how to build the URL
+//   merge: construct an object to merged into the result
 //   build: the class to instantiate post-request
 //   member: truthy if a member function 
 //
 // Returns: 
 //   cls
-function addFunction(cls,name,method,url,query,body,build,member) {
+function addFunction(cls,name,method,url,query,body,merge,build,member) {
     (member ? cls.prototype : cls)[name] = function() {
 	
 	var a = arrayOfArguments(arguments), promise, self = this;
@@ -81,6 +82,8 @@ function addFunction(cls,name,method,url,query,body,build,member) {
 	}
 
 	return request(method,compose(url),compose(query)||{},compose(body)).then(function(data) {
+	    var merged = merge ? merge(self) : {};
+	    for (var k in merged) if (!k in data) data[k] = merged[k];
 	    return build(data,self);
 	});	
     };
