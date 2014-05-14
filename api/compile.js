@@ -168,6 +168,49 @@ function compile(model,path)
 	    if (make === null) return generated.push('identity');
 	    if (make === '@') return generated.push('assignToThis');		
 	    
+	    if (make instanceof Array) 
+	    {
+		generated.push('fromEach(');
+		output(make[0]);
+		generated.push(')');
+		return;
+	    }
+
+	    if (typeof make === 'object') 
+	    {
+		var k;
+
+		// Pick a key, any key, from the object.
+		for (k in make) break;
+		
+		if (k.charAt(0) == '.') 
+		{
+		    var member = k.substring(1);
+		    generated.push('fromDataMember(');
+		    string(member);
+		    comma();
+		    output(make[k]);
+		    generated.push(')');
+		}
+		else
+		{
+		    var first = true;
+		    generated.push('assignToDictionary(');
+		    for (k in make) 
+		    {
+			if (first) first = false;
+			else comma();
+			
+			string(k);
+			comma();
+			output(make[k]);
+		    }
+		    generated.push(')');
+		}
+
+		return;
+	    }
+
 	    if (typeof make === 'string') 
 	    {
 		generated.push('assignToNew(');

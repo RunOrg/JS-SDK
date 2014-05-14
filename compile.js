@@ -121,3 +121,25 @@ function assignToThis(data,self) {
     for (var k in data) self[k] = data[k];
     return self;
 }
+
+// Apply inner function to a member of the data
+function fromDataMember(member,func) {
+    return function(data,self) { return func(data[member],self); };
+}
+
+// Construct a dictionary from the result
+function assignToDictionary() {
+    var a = arguments;
+    return function(data,self) {	
+	for (var out = {}, i = 0; i < a.length; i+=2) out[a[i]] = a[i+1](data,self);
+	return out;
+    }
+}
+
+// Parse a list using a function
+function fromEach(func) {
+    return function(data,self) {
+	for (var out = [], i = 0; i < data.length; ++i) out.push(func(data[i],self));
+	return out;
+    }
+}

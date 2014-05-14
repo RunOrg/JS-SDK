@@ -57,9 +57,16 @@ module.exports.Group = {
 		body:   { id: '@id', label: '@label', audience: '@audience' }, 
 		make:   '@', 
 	    }, 
-	    Load: {
+	    List: {
+		args:   ['limit', 'offset'],
 		method: 'GET',
 		url:    '/groups/@id',
+		query:  { limit: ':limit', offset: ':offset' },
+		make:   { '.list' : [ 'Person' ] } 
+	    },
+	    Load: {
+		method: 'GET',
+		url:    '/groups/@id/info',
 		make:   '@',
 	    },
 	    Delete: {
