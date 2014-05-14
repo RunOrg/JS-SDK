@@ -269,7 +269,7 @@ function compressGenerated()
     var hashes = {};
     
     function replace(string) {	
-	if (string.length < 2 || occurrences[string] < 2) return null;
+	if (true || string.length < 2 || occurrences[string] < 2) return null;
 	if (string in hashes) return hashes[string];
 	return hashes[string] = 'string' + (next++);
     }
