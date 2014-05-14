@@ -97,7 +97,7 @@ function request(method, url, query, payload)
 		}
 		
 		clock = JSON.stringify(c);
-		clock_expires = now() + 60000; // <- Assume that it expires after 1 minute
+		clock_expiration = now() + 60000; // <- Assume that it expires after 1 minute
 	    }
 
 	    // Is there an authentication value returned ? 
