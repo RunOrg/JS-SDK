@@ -7,14 +7,13 @@ module.exports.Person = {
 	    'pic', 
 	],
 	statics: {
-	    Get: {
-		args:   ['id'], 
-		method: 'GET', 
-		url:    '/people/:id', 
-		make:   'Person', 
-	    },
 	},
-	methods: {	    
+	methods: {
+	    Load: {
+		method: 'GET',
+		url:    '/people/@id',
+		make:   '@',
+	    },
 	}
     },
     
@@ -28,14 +27,13 @@ module.exports.Person = {
 		'familyName', 
 	    ],
 	    statics: {
-		Get: {
-		    args:   ['id'], 
-		    method: 'GET', 
-		    url:    '/people/:id/info', 
-		    make:   'Person.Profile',
-		},
 	    },
 	    methods: {
+		Load: {
+		    method: 'GET',
+		    url:    '/people/@id/info',
+		    make:   '@',
+		},
 	    }
 	}
     }
@@ -51,12 +49,6 @@ module.exports.Group = {
 	    'access',
 	],
 	statics: {
-	    Get: {
-		args:   ['id'],
-		method: 'GET',
-		url:    '/groups/:id',
-		make:   'Group', 
-	    },
 	},
 	methods: {
 	    Create: {
@@ -64,7 +56,16 @@ module.exports.Group = {
 		url:    '/groups',
 		body:   { id: '@id', label: '@label', audience: '@audience' }, 
 		make:   '@', 
-	    },		     
+	    }, 
+	    Load: {
+		method: 'GET',
+		url:    '/groups/@id',
+		make:   '@',
+	    },
+	    Delete: {
+		method: 'DELETE',
+		url:    '/groups/@id',
+	    },
 	    Add: {
 		args:   ['person'],
 		method: 'POST',
@@ -76,6 +77,18 @@ module.exports.Group = {
 		method: 'POST',
 		url:    '/groups/@id/remove',
 		body:   [':person'], 
+	    },
+	    AddMany: {
+		args:   ['people'],
+		method: 'POST',
+		url:    '/groups/@id/add',
+		body:   ':people', 
+	    },
+	    RemoveMany: {
+		args:   ['people'], 
+		method: 'POST',
+		url:    '/groups/@id/remove',
+		body:   ':people', 
 	    },
 	}
     }
