@@ -118,12 +118,22 @@ function compile(model,path)
 	    {
 		var key = arg.substring(1);
 
-		if (key.charAt(key.length - 1) == '?') 
-		    key = key.substring(0,key.length - 1);
-		
+		if (key === '') 
+		{
+		    generated.push('identity');
+		    return;
+		}
+
 		for (var i = 0; i < model.fields.length; ++i) 
+		{
 		    if (model.fields[i] === key) 
-			return string(arg);
+		    {	
+			generated.push('getMember(');
+			string(key);
+			generated.push(')');
+			return;
+		    }
+		}
 
 		throw ("Unknown field " + arg + " in " + path + "." + name)
 	    }

@@ -42,7 +42,7 @@ module.exports.Group = {
 	    Get: [ ['id'], [ 'GET', '/groups/:id' ], 'Group' ],
 	},
 	methods: {
-	    Create: [ [], [ 'POST', '/groups', { id: '@id?', label: '@label?' } ], 'this' ],		      
+	    Create: [ [], [ 'POST', '/groups', { id: '@id', label: '@label' } ], 'this' ],		      
 	}
     }
 
