@@ -4,10 +4,15 @@ module.exports.Person = {
 	fields: [ 
 	    'label', 
 	    'gender', 
-	    'pic' 
+	    'pic', 
 	],
 	statics: {
-	    Get: [ ['id'], [ 'GET', '/people/:id' ], 'Person' ],
+	    Get: {
+		args:   ['id'], 
+		method: 'GET', 
+		url:    '/people/:id', 
+		make:   'Person', 
+	    },
 	},
 	methods: {	    
 	}
@@ -20,10 +25,15 @@ module.exports.Person = {
 		'name', 
 		'email', 
 		'givenName', 
-		'familyName' 
+		'familyName', 
 	    ],
 	    statics: {
-		Get: [ ['id'], [ 'GET', '/people/:id/info' ], 'Person.Profile' ],
+		Get: {
+		    args:   ['id'], 
+		    method: 'GET', 
+		    url:    '/people/:id/info', 
+		    make:   'Person.Profile',
+		},
 	    },
 	    methods: {
 	    }
@@ -36,13 +46,37 @@ module.exports.Group = {
     model: {
 	fields: [
 	    'label',
-	    'count'
+	    'count',
+	    'audience',
+	    'access',
 	],
 	statics: {
-	    Get: [ ['id'], [ 'GET', '/groups/:id' ], 'Group' ],
+	    Get: {
+		args:   ['id'],
+		method: 'GET',
+		url:    '/groups/:id',
+		make:   'Group', 
+	    },
 	},
 	methods: {
-	    Create: [ [], [ 'POST', '/groups', null, { id: '@id', label: '@label' } ], '@' ],		      
+	    Create: {
+		method: 'POST',
+		url:    '/groups',
+		body:   { id: '@id', label: '@label', audience: '@audience' }, 
+		make:   '@', 
+	    },		     
+	    Add: {
+		args:   ['person'],
+		method: 'POST',
+		url:    '/groups/@id/add',
+		body:   [':person'], 
+	    },
+	    Remove: {
+		args:   ['person'], 
+		method: 'POST',
+		url:    '/groups/@id/remove',
+		body:   [':person'], 
+	    },
 	}
     }
 

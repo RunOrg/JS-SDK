@@ -42,23 +42,28 @@ function compile(model,path)
     for (var k in model.statics) 
     {
 	var s = model.statics[k];
-	content = addFunction(k, s[0], s[1][0], s[1][1], s[1][2] || false, 
-			      s[1][3] || false, s[2], false, content);
+	content = addFunction(k, s, false, content);
     }
 
     for (var k in model.methods) 
     {
 	var s = model.methods[k];
-	content = addFunction(k, s[0], s[1][0], s[1][1], s[1][2] || false, 
-			      s[1][3] || false, s[2], true, content);
+	content = addFunction(k, s, true, content);
     }
 
     content();
     generated.push(';\n');
 
     // ex: addFunction(...,'Get','GET',['person',0],query,body,['Person'],m)
-    function addFunction(name,args,method,url,query,body,make,member,then) 
+    function addFunction(name,data,member,then) 
     {
+	var method = data.method;
+	var url    = data.url;
+	var make   = data.make || null;
+	var body   = data.body || {};
+	var query  = data.query || null;
+	var args   = data.args || [];
+
 	return function() 
 	{
 	    generated.push('addFunction(');
@@ -91,6 +96,12 @@ function compile(model,path)
 	// Format an argument constructor
 	function argument(arg) 
 	{
+	    if (arg instanceof Array) 
+	    {
+		array(arg,argument);
+		return;
+	    }
+
 	    if (typeof arg === 'object')
 	    {
 		var out = {};
@@ -154,6 +165,7 @@ function compile(model,path)
 	// Format an output constructor
 	function output(make) 
 	{
+	    if (make === null) return generated.push('identity');
 	    if (make === '@') return generated.push('assignToThis');		
 	    
 	    if (typeof make === 'string') 
