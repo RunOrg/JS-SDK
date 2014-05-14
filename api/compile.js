@@ -40,18 +40,25 @@ function compile(model,path)
     for (var k in model.statics) 
     {
 	var s = model.statics[k];
-	content = addStatic(k, s[0], s[1][0], s[1][1], s[2], content);
+	content = addFunction(k, s[0], s[1][0], s[1][1], s[2], false, content);
     }
+
+    for (var k in model.methods) 
+    {
+	var s = model.methods[k];
+	content = addFunction(k, s[0], s[1][0], s[1][1], s[2], true, content);
+    }
+
 
     content();
     generated.push(';\n');
 
-    // ex: addStatic(...,'Get','GET',['person',0],['Person'])
-    function addStatic(name,args,method,url,make,then) 
+    // ex: addFunction(...,'Get','GET',['person',0],['Person'],m)
+    function addFunction(name,args,method,url,make,member,then) 
     {
 	return function() 
 	{
-	    generated.push('addStatic(');
+	    generated.push('addFunction(');
 
 	    then(); comma();
 
@@ -62,6 +69,8 @@ function compile(model,path)
 	    array(url.split('/').filter(function(s) { return s != ''; }),argument); comma();
 
 	    array(make.split('.'),string);
+
+	    if (member) generated.push(',1');
 
 	    generated.push(')');
 	}

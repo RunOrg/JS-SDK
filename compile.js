@@ -53,12 +53,13 @@ function newClass() {
 //   method: the HTTP method used to send data
 //   url: an array describing how to build the URL
 //   build: the class to instantiate post-request
+//   member: truthy if a member function 
 //
 // Returns: 
 //   cls
-function addStatic(cls,name,method,url,build) {
- 
-    cls[name] = function() {
+function addFunction(cls,name,method,url,build,member) {
+    (member ? cls.prototype : cls)[name] = function() {
+	
 	var a = arrayOfArguments(arguments), u = url.slice(0), promise;
 
 	// Construct the contents of the URL
