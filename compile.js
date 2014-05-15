@@ -51,7 +51,7 @@ function addFunction(cls,name,method,url,query,body,merge,build,member) {
 	    // Arrays are traversed and composed recursively
 	    if (arg instanceof Array) {
 		out = [];
-		for (k = 0 ; k < arg.length; ++i) 
+		for (k = 0 ; k < arg.length; ++k) 
 		    out.push(compose(arg[k]));		
 		return out;
 	    }
@@ -110,7 +110,7 @@ function getMember(member) {
 // Returns: 
 //   a function which returns args[nth]
 function getArgument(nth) {
-    return function(self,args) { return args[nth]; };
+    return function(self,args) { return args[nth] || null; };
 }
 
 // Assign to a new instance of a class

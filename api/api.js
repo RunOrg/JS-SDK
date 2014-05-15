@@ -260,6 +260,14 @@ module.exports.Form = {
 };
 
 module.exports.Mail = {
+    model: {
+	fields: [
+	],
+	statics: {
+	},
+	methods: {
+	},
+    },
     Outgoing: {
 	model: {
 	    fields: [

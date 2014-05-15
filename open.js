@@ -1,3 +1,3 @@
-var RunOrg = MakeRunorg(jQuery);
+var RunOrg = MakeRunOrg(jQuery);
 function MakeRunOrg($) {
     var RunOrg = {};

@@ -8,6 +8,7 @@ runorg.min.js: runorg.js
 
 runorg.js: open.js util.js request.js api.js compile.js close.js 
 	@cat $^ > $@
+	@cp $@ www/
 	@wc -c $@
 
 api.js: api/compile.js api/api.js

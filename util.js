@@ -2,7 +2,7 @@
 
 // Turn an array into argumens
 function arrayOfArguments(a) {
-    return Array.prototype.slice(a,0);
+    return Array.prototype.slice.call(a,0);
 }
 
 // Grab a class member of the 'RunOrg' object

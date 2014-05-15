@@ -106,7 +106,7 @@ function request(method, url, query, payload)
 		as    = data.self.id;
 	    } 
 
-	    result.resolve([ xhr.status, data ]);
+	    result.resolve(data);
 	}
 	else
 	    result.reject(success ? {HTTP:xhr.status} : {error:status});
