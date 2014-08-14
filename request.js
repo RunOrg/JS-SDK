@@ -42,6 +42,7 @@ function request(method, url, query, payload)
         ajax;
 
     if (clock && clock_expiration < now()) clock = null;
+    if (typeof url == 'string') url = [url];
 
     // Construct the url by appending any necessary parameters
 
@@ -86,15 +87,12 @@ function request(method, url, query, payload)
 	    // Is there a new clock value returned ? 
 	    if ('at' in data) {
 
-	    	var c = clock ? JSON.parse(clock) : [], i, j, n = c.length, at = data.at;
+	    	var c = clock ? JSON.parse(clock) : {}, i, j, n = c.length, at = data.at;
 		
 		// Merge the new clock value with the old one
-		for (i = 0; i < at.length; ++i) {
-		    for (j = 0; j < n; ++j) 
-			if (c[j][0] == at[i][0]) { c[j][1] = at[i][1]; break; }
-		    if (j == n) 
-			c.push(at[i]);
-		}
+		for (k in at) 
+		    if (!(k in c) || c[k] < at[k])
+			c[k] = at[k];
 		
 		clock = JSON.stringify(c);
 		clock_expiration = now() + 60000; // <- Assume that it expires after 1 minute

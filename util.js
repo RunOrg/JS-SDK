@@ -1,34 +1,38 @@
 // Utility functions
 
-// Turn an array into argumens
-function arrayOfArguments(a) {
-    return Array.prototype.slice.call(a,0);
+// Fill an object with data from the specified list
+//
+function fill(obj,data,fields) {
+
+    if (typeof data == "string") data = { id : data };
+    data = data || {};
+    
+    fields.forEach(function(field) {
+	obj[field] = data[field] || null;
+    });
+
 }
 
-// Grab a class member of the 'RunOrg' object
-function grabFromRunOrg(path) {    
-    for (var i = 0, r = RunOrg; i < path.length; ++i) {
-	r = RunOrg[path[i]];
-    }
-    return r;
-}
-
-// Turn a class into a 'new' call to that class
-function construct(cls) {
-    return function(arg) {
-	return new cls(arg);
-    }
-}
-
-// Is a value a string?
-function isString(x) { return typeof x === 'string'; }
-
-// Create a dictionary from the argument pairs. 
-function dictionary() {
-    var a = arrayOfArguments(arguments), out = {};
-    for (var i = 0; i < a.length; i += 2) out[a[i]] = a[i+1];
+// Keep only the specified fields from the source object
+//
+function keep(data,fields) {
+    var out = {};
+    fill(out,data,fields);
     return out;
 }
 
-// Identity function
-function identity(x) { return x; }
+// A constant, successful promise
+//
+function promise(data) {
+    var r = $.Deferred();
+    r.resolve(data);
+    return r;
+}
+
+// Returns the value or its .id (if set)
+//
+function id(o) {
+    if (typeof o == 'object' && o !== null && 'id' in o)
+	return o.id;
+    return o;
+}

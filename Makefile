@@ -6,13 +6,13 @@ runorg.min.js: runorg.js
 	@cat $^ | yui-compressor --type js > $@
 	@wc -c $@
 
-runorg.js: open.js util.js request.js api.js compile.js close.js 
+runorg.js: open.js util.js request.js \
+	api-people.js api-group.js api-auth.js api-key.js api-token.js api-chat.js \
+	close.js 
+
 	@cat $^ > $@
 	@cp $@ www/
 	@wc -c $@
 
-api.js: api/compile.js api/api.js
-	@(cd api ; nodejs compile.js) > $@
-
 clean: 
-	@rm runorg.js runorg.min.js api.js runorg.min.js.gz
+	@rm runorg.js runorg.min.js runorg.min.js.gz
