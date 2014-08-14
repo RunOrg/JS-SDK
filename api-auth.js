@@ -6,8 +6,9 @@ var Auth = {
 	});
     },
 
-    HMAC: function(proof) {
-	return request("POST","people/auth/hmac",{},{proof:proof}).then(function(data) {
+    HMAC: function(params) {
+	params = keep(params,['id','expires','key','proof']);
+	return request("POST","people/auth/hmac",{},params).then(function(data) {
 	    return Person.Cache(data.self);
 	});
     }

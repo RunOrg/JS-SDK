@@ -41,6 +41,8 @@ function request(method, url, query, payload)
         // The ajax configuration.
         ajax;
 
+    query = query || {};
+
     if (clock && clock_expiration < now()) clock = null;
     if (typeof url == 'string') url = [url];
 
@@ -52,6 +54,7 @@ function request(method, url, query, payload)
     token && (query.as = as);
 
     for (key in query) {
+	if (query[key] === null) continue;
 	url += sep + key + '=' + query[key]; 
 	sep = '&';
     }

@@ -38,6 +38,12 @@ Group.prototype = Object.create({
 	});
     },
 
+    // Save the group information
+    //
+    Save: function() {
+	return request("PUT",["groups",this.id,"info"],{},keep(this,["label", "audience"]));
+    },
+
     // Delete the group from the server
     //
     Delete: function() {

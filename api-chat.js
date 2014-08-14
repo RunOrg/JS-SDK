@@ -24,7 +24,7 @@ Post.prototype = Object.create({
     Load: function() {
 	var self = this;
 	return request('GET',['chat',this.chat,'posts',this.id]).then(function(data) {
-	    Chat.call(self,data.info);
+	    Post.call(self,data.info);
 	    data.people.forEach(Person.Cache);
 	    return self;
 	});
@@ -50,6 +50,12 @@ Post.prototype = Object.create({
 		chat: self.chat
 	    });
 	});
+    },
+
+    // Start (or stop) tracking a post
+    //
+    Track: function(track) {
+	return request('POST',['chat',this.chat,'posts',this.id,'track'],{},track);
     },
 
     // List replies 
