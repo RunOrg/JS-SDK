@@ -12,8 +12,12 @@ function Post(init) {
 
     // Recursively fill the tree
     var tree = this.tree = this.tree || { count: 0, top: [] };
+    var chat = this.chat;
     if (tree.top.length > 0) {
-	tree.top = tree.top.map(function(data) { return new Post(data); });
+	tree.top = tree.top.map(function(data) { 
+	    data.chat = chat; 
+	    return new Post(data); 
+	});
     }
 }
 
@@ -64,7 +68,7 @@ Post.prototype = Object.create({
 	var self = this;
 	params = keep(params || {},['limit','offset']);
 	params.under = self.id;
-	return request('GET',['chat',this.id,'posts'],params).then(function(data) {
+	return request('GET',['chat',this.chat,'posts'],params).then(function(data) {
 	    data.people.forEach(Person.Cache);
 	    return data.posts.map(function(post) { 
 		post.chat = self.chat; 
