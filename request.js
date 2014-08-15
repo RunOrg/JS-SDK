@@ -1,18 +1,17 @@
 function now() { return +new Date(); }
 
-    // The last token returned by an authentication method
-var token = null, 
+// The last token returned by an authentication method
+// --> RunOrg.token 
 
-    // The 'as' that corresponds to the token (if it is not
-    // null).
-    as,
+// The 'as' that corresponds to the token (if it is not null).
+// --> RunOrg.as
 
-    // The clock returned by the last clock-based request
-    clock = null,
+// The clock returned by the last clock-based request
+// --> RunOrg.clock 
 
-    // The time when the clock expires. Only used if 'clock' 
-    // is not null.
-    clock_expiration;
+// The time when the clock expires. Only used if 'clock' 
+// is not null.
+var clock_expiration;
 
 // Perform a request. 
 //
@@ -30,28 +29,28 @@ var token = null,
 function request(method, url, query, payload)
 {    
         // The current query string separator
-    var sep = '?', 
+    var sep = '?';
 
         // The returned result
-        result = $.Deferred(),
+    var result = $.Deferred();
 
-        // Key for traversing the query string
-        key,
+    // Key for traversing the query string
+    var key;
 
-        // The ajax configuration.
-        ajax;
+    // The ajax configuration.
+    var ajax;
 
     query = query || {};
 
-    if (clock && clock_expiration < now()) clock = null;
+    if (RunOrg.clock && clock_expiration < now()) RunOrg.clock = null;
     if (typeof url == 'string') url = [url];
 
     // Construct the url by appending any necessary parameters
 
     url = RunOrg.endpoint + '/db/' + RunOrg.db + '/' + url.join('/');
 
-    clock && (query.at = clock);
-    token && (query.as = as);
+    RunOrg.clock && (query.at = RunOrg.clock);
+    RunOrg.token && (query.as = RunOrg.as);
 
     for (key in query) {
 	if (query[key] === null) continue;
@@ -68,7 +67,7 @@ function request(method, url, query, payload)
 	type: method,
 
 	beforeSend: function(xhr) {
-	    token && xhr.setRequestHeader('Authorization','RUNORG token=' + token);
+	    RunOrg.token && xhr.setRequestHeader('Authorization','RUNORG token=' + RunOrg.token);
 	}
     };
 
@@ -90,21 +89,21 @@ function request(method, url, query, payload)
 	    // Is there a new clock value returned ? 
 	    if ('at' in data) {
 
-	    	var c = clock ? JSON.parse(clock) : {}, i, j, n = c.length, at = data.at;
+	    	var c = RunOrg.clock ? JSON.parse(RunOrg.clock) : {}, at = data.at;
 		
 		// Merge the new clock value with the old one
 		for (k in at) 
 		    if (!(k in c) || c[k] < at[k])
 			c[k] = at[k];
 		
-		clock = JSON.stringify(c);
+		RunOrg.clock = JSON.stringify(c);
 		clock_expiration = now() + 60000; // <- Assume that it expires after 1 minute
 	    }
 
 	    // Is there an authentication value returned ? 
 	    if ('token' in data && 'self' in data) {
-		token = data.token;
-		as    = data.self.id;
+		RunOrg.token = data.token;
+		RunOrg.as    = data.self.id;
 	    } 
 
 	    result.resolve(data);
